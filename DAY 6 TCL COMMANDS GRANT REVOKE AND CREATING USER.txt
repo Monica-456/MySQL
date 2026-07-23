@@ -1,0 +1,376 @@
+DAY 6
+
+TO CREATE A NEW TABLE BASED ON AN EXISTING TABLE.
+SYNTAX:-
+CREATE TABLE NEW_TABLE-NAME AS SELECT*FROM TABLE-NAME  #(from where you want to extract data)
+
+
+mysql> CREATE TABLE EMPLOYEES(
+    -> EMPID INT AUTO_INCREMENT PRIMARY KEY,
+    -> NAME VARCHAR(20),
+    -> DEPARTMENT VARCHAR(30)
+    -> );
+Query OK, 0 rows affected (0.03 sec)
+
+mysql> INSERT INTO EMPLOYEES(NAME,DEPARTMENT) VALUES
+    -> ('MALLI','IT'),
+    -> ('INDU','HR'),
+    -> ('MONICA','FINANCE');
+Query OK, 3 rows affected (0.01 sec)
+Records: 3  Duplicates: 0  Warnings: 0
+
+mysql> SELECT*FROM EMPLOYEES;
++-------+--------+------------+
+| EMPID | NAME   | DEPARTMENT |
++-------+--------+------------+
+|     1 | MALLI  | IT         |
+|     2 | INDU   | HR         |
+|     3 | MONICA | FINANCE    |
++-------+--------+------------+
+3 rows in set (0.00 sec)
+
+mysql> SHOW TABLES;
++---------------+
+| Tables_in_da4 |
++---------------+
+| company_staff |
+| employees     |
++---------------+
+2 rows in set (0.00 sec)
+
+mysql> CREATE TABLE BACKUPEMPLOYEES AS SELECT*FROM EMPLOYEES; 
+Query OK, 3 rows affected (0.05 sec)
+Records: 3  Duplicates: 0  Warnings: 0
+
+mysql> SHOW TABLES;
++-----------------+
+| Tables_in_da4   |
++-----------------+
+| backupemployees |
+| company_staff   |
+| employees       |
++-----------------+
+3 rows in set (0.00 sec)
+
+mysql> DESC BACKUPEMPLOYEES;
++------------+-------------+------+-----+---------+-------+
+| Field      | Type        | Null | Key | Default | Extra |
++------------+-------------+------+-----+---------+-------+
+| EMPID      | int         | NO   |     | 0       |       |
+| NAME       | varchar(20) | YES  |     | NULL    |       |
+| DEPARTMENT | varchar(30) | YES  |     | NULL    |       |
++------------+-------------+------+-----+---------+-------+
+3 rows in set (0.01 sec)
+
+mysql> SELECT*FROM BACKUPEMPLOYEES;
++-------+--------+------------+
+| EMPID | NAME   | DEPARTMENT |
++-------+--------+------------+
+|     1 | MALLI  | IT         |
+|     2 | INDU   | HR         |
+|     3 | MONICA | FINANCE    |
++-------+--------+------------+
+3 rows in set (0.00 sec)
+
+mysql> CREATE TABLE PRODUCTS(
+    -> PRODUCTID INT AUTO_INCREMENT PRIMARY KEY,
+    -> PRODUCTNAME VARCHAR(20),
+    -> PRICE DECIMAL(10,2)
+    -> PRICE DECIMAL(10,2)^C
+mysql> CREATE TABLE PRODUCTS(
+    -> PRODUCTID INT AUTO_INCREMENT PRIMARY KEY,
+    -> PRODUCTNAME VARCHAR(20),
+    -> PRICE DECIMAL(10,2),
+    -> QUANTITY INT,
+    -> TOTALAMOUNT DECIMAL(10,2) GENERATED ALWAYS AS(PRICE*QUANTITY)STORED
+    -> );
+Query OK, 0 rows affected (0.02 sec)
+
+mysql> SHOW TABLES;
++-----------------+
+| Tables_in_da4   |
++-----------------+
+| backupemployees |
+| company_staff   |
+| employees       |
+| products        |
++-----------------+
+4 rows in set (0.00 sec)
+
+mysql> DESC PRODUCTS;
++-------------+---------------+------+-----+---------+------------------+
+| Field       | Type          | Null | Key | Default | Extra            |
++-------------+---------------+------+-----+---------+------------------+
+| PRODUCTID   | int           | NO   | PRI | NULL    | auto_increment   |
+| PRODUCTNAME | varchar(20)   | YES  |     | NULL    |                  |
+| PRICE       | decimal(10,2) | YES  |     | NULL    |                  |
+| QUANTITY    | int           | YES  |     | NULL    |                  |
+| TOTALAMOUNT | decimal(10,2) | YES  |     | NULL    | STORED GENERATED |
++-------------+---------------+------+-----+---------+------------------+
+5 rows in set (0.00 sec)
+
+mysql> INSERT INTO PRODUCTS(
+    -> PRODUCTNAME = 'WATCH',
+    -> PRICE = '12000',
+    -> QUANTITY = '1'^C
+mysql> INSERT INTO PRODUCTS SET
+    -> PRODUCTNAME = 'WATCH',
+    -> PRICE = '12000',
+    -> QUANTITY = '2';
+Query OK, 1 row affected (0.01 sec)
+
+mysql> DESC PRODUCTS;
++-------------+---------------+------+-----+---------+------------------+
+| Field       | Type          | Null | Key | Default | Extra            |
++-------------+---------------+------+-----+---------+------------------+
+| PRODUCTID   | int           | NO   | PRI | NULL    | auto_increment   |
+| PRODUCTNAME | varchar(20)   | YES  |     | NULL    |                  |
+| PRICE       | decimal(10,2) | YES  |     | NULL    |                  |
+| QUANTITY    | int           | YES  |     | NULL    |                  |
+| TOTALAMOUNT | decimal(10,2) | YES  |     | NULL    | STORED GENERATED |
++-------------+---------------+------+-----+---------+------------------+
+5 rows in set (0.00 sec)
+
+mysql> INSERT INTO PRODUCTS(PRODUCTNAME,PRICE,QUANTITY)
+    -> VALUES
+    -> ('SMART PHONE',19999.99,2),
+    -> ('SMART PHONE',3989.89,3),
+    -> ('SMART PHONE',1977.65,5);^C
+mysql> INSERT INTO PRODUCTS(PRODUCTNAME,PRICE,QUANTITY)
+    -> VALUES
+    -> ('SMART PHONE',19999.99,2),
+    -> ('HEAD PHONE',3989.89,3),
+    -> ('POWER BANK',1977.65,5);
+Query OK, 3 rows affected (0.01 sec)
+Records: 3  Duplicates: 0  Warnings: 0
+
+mysql> SELECT*FROM PRODUCTS;
++-----------+-------------+----------+----------+-------------+
+| PRODUCTID | PRODUCTNAME | PRICE    | QUANTITY | TOTALAMOUNT |
++-----------+-------------+----------+----------+-------------+
+|         1 | WATCH       | 12000.00 |        2 |    24000.00 |
+|         2 | SMART PHONE | 19999.99 |        2 |    39999.98 |
+|         3 | HEAD PHONE  |  3989.89 |        3 |    11969.67 |
+|         4 | POWER BANK  |  1977.65 |        5 |     9888.25 |
++-----------+-------------+----------+----------+-------------+
+4 rows in set (0.00 sec)
+
+mysql> UPDATE PRODUCTS SET PRICE=18000.99 WHERE PRODUCTID=1;
+Query OK, 1 row affected (0.01 sec)
+Rows matched: 1  Changed: 1  Warnings: 0
+
+mysql> SELECT*FROM PRODUCTS;
++-----------+-------------+----------+----------+-------------+
+| PRODUCTID | PRODUCTNAME | PRICE    | QUANTITY | TOTALAMOUNT |
++-----------+-------------+----------+----------+-------------+
+|         1 | WATCH       | 18000.99 |        2 |    36001.98 |
+|         2 | SMART PHONE | 19999.99 |        2 |    39999.98 |
+|         3 | HEAD PHONE  |  3989.89 |        3 |    11969.67 |
+|         4 | POWER BANK  |  1977.65 |        5 |     9888.25 |
++-----------+-------------+----------+----------+-------------+
+4 rows in set (0.00 sec)
+
+mysql> DELETE FROM PRODUCTS WHERE PRODUCTID=1;
+Query OK, 1 row affected (0.01 sec)
+
+mysql> SELECT*FROM PRODUCTS;
++-----------+-------------+----------+----------+-------------+
+| PRODUCTID | PRODUCTNAME | PRICE    | QUANTITY | TOTALAMOUNT |
++-----------+-------------+----------+----------+-------------+
+|         2 | SMART PHONE | 19999.99 |        2 |    39999.98 |
+|         3 | HEAD PHONE  |  3989.89 |        3 |    11969.67 |
+|         4 | POWER BANK  |  1977.65 |        5 |     9888.25 |
++-----------+-------------+----------+----------+-------------+
+3 rows in set (0.00 sec)
+
+mysql> UPDATE PRODUCTS SET PRICE=18000.99 WHERE PRODUCTID=2;
+Query OK, 1 row affected (0.01 sec)
+Rows matched: 1  Changed: 1  Warnings: 0
+
+mysql> SELECT*FROM PRODUCTS;
++-----------+-------------+----------+----------+-------------+
+| PRODUCTID | PRODUCTNAME | PRICE    | QUANTITY | TOTALAMOUNT |
++-----------+-------------+----------+----------+-------------+
+|         2 | SMART PHONE | 18000.99 |        2 |    36001.98 |
+|         3 | HEAD PHONE  |  3989.89 |        3 |    11969.67 |
+|         4 | POWER BANK  |  1977.65 |        5 |     9888.25 |
++-----------+-------------+----------+----------+-------------+
+3 rows in set (0.00 sec)
+
+mysql> CREATE TABLE STUDENTS(
+    -> SID INT AUTO_INCREMENT PRIMARY KEY,
+    -> SNAME VARCHAR(20),
+    -> SMOBILE VARCHAR(10),
+    -> SMARKS INT(3)
+    -> );
+Query OK, 0 rows affected, 1 warning (0.02 sec)
+
+mysql> INSERT INTO STUDENTS(SNAME,SMOBILE,SMARKS)
+    -> VALUES
+    -> ('SUNNY','8897656456',67),
+    -> ('BUNNY','1234567890',98),
+    -> ('VINNY','0987564321',86),
+    -> ('CHINNU','0987586456',78);
+Query OK, 4 rows affected (0.01 sec)
+Records: 4  Duplicates: 0  Warnings: 0
+
+mysql> SELECT*FROM STUDENTS;
++-----+--------+------------+--------+
+| SID | SNAME  | SMOBILE    | SMARKS |
++-----+--------+------------+--------+
+|   1 | SUNNY  | 8897656456 |     67 |
+|   2 | BUNNY  | 1234567890 |     98 |
+|   3 | VINNY  | 0987564321 |     86 |
+|   4 | CHINNU | 0987586456 |     78 |
++-----+--------+------------+--------+
+4 rows in set (0.00 sec)
+
+mysql> DESC STUDENTS;
++---------+-------------+------+-----+---------+----------------+
+| Field   | Type        | Null | Key | Default | Extra          |
++---------+-------------+------+-----+---------+----------------+
+| SID     | int         | NO   | PRI | NULL    | auto_increment |
+| SNAME   | varchar(20) | YES  |     | NULL    |                |
+| SMOBILE | varchar(10) | YES  |     | NULL    |                |
+| SMARKS  | int         | YES  |     | NULL    |                |
++---------+-------------+------+-----+---------+----------------+
+4 rows in set (0.00 sec)
+
+mysql> SELECT*FROM STUDENTS;
++-----+--------+------------+--------+
+| SID | SNAME  | SMOBILE    | SMARKS |
++-----+--------+------------+--------+
+|   1 | SUNNY  | 8897656456 |     67 |
+|   2 | BUNNY  | 1234567890 |     98 |
+|   3 | VINNY  | 0987564321 |     86 |
+|   4 | CHINNU | 0987586456 |     78 |
++-----+--------+------------+--------+
+4 rows in set (0.00 sec)
+
+mysql> --O CREATE USER
+    -> --SYNTAX: CREATE USER 'USERNAME' IDENTIFIED BY 'PASSWORD'
+    -> ^C
+mysql> CREATE USER MONICA IDENTIFIED BY 'MONICA12';
+Query OK, 0 rows affected (0.04 sec)
+
+mysql> CREATE USER BASHA IDENTIFIED BY 'BASHA@123';
+Query OK, 0 rows affected (0.01 sec)
+
+mysql> --TO GRANT PERMISSIONS
+    -> --SYNTAX: GRANT PRIVILAGE ON TABLE-NAME TO "USERNAME"
+    -> ^C
+mysql> GRANT SELECT,INSERT,UPDATE ON STUDENTS TO MONICA;
+Query OK, 0 rows affected (0.01 sec)
+
+mysql> GRANT SELECT,INSERT ON STUDENTS TO BASHA;
+Query OK, 0 rows affected (0.01 sec)
+
+mysql> CREATE USER CHANDU IDENTIFIED BY 'CHANDU11';
+Query OK, 0 rows affected (0.01 sec)
+
+mysql> GRANT ALL PRIVILEGES ON STUDENTS TO CHANDU;
+Query OK, 0 rows affected (0.01 sec)
+
+mysql> -- TO REVOKE PRIVALEGES
+mysql> --SYNTAX: REVOKE PRIVILEGES ON TABLE-NAME FROM "USERNAME"^C
+mysql> REVOKE INSERT,UPDATE ON STUDENTS TO MONICA;
+ERROR 1064 (42000): You have an error in your SQL syntax; check the manual that corresponds to your MySQL server version for the right syntax to use near 'TO MONICA' at line 1
+mysql> REVOKE INSERT,UPDATE ON STUDENTS TO MONICA;
+ERROR 1064 (42000): You have an error in your SQL syntax; check the manual that corresponds to your MySQL server version for the right syntax to use near 'TO MONICA' at line 1
+mysql> REVOKE INSERT,UPDATE ON STUDENTS FROM MONICA;
+Query OK, 0 rows affected (0.01 sec)
+
+mysql> REVOKE DELETE ON STUDENTS FROM BASHA;
+Query OK, 0 rows affected (0.01 sec)
+
+mysql>
+====>>
+cmd to check grant and revoke:-
+
+Microsoft Windows [Version 10.0.26200.8655]
+(c) Microsoft Corporation. All rights reserved.
+
+C:\Program Files\MySQL\MySQL Server 8.0\bin>MySQL -u MONICA -p
+Enter password: ********
+Welcome to the MySQL monitor.  Commands end with ; or \g.
+Your MySQL connection id is 12
+Server version: 8.0.46 MySQL Community Server - GPL
+
+Copyright (c) 2000, 2026, Oracle and/or its affiliates.
+
+Oracle is a registered trademark of Oracle Corporation and/or its
+affiliates. Other names may be trademarks of their respective
+owners.
+
+Type 'help;' or '\h' for help. Type '\c' to clear the current input statement.
+
+mysql> USE da4;
+Database changed
+mysql> SELECT*FROM STUDENTS;
++-----+--------+------------+--------+
+| SID | SNAME  | SMOBILE    | SMARKS |
++-----+--------+------------+--------+
+|   1 | SUNNY  | 8897656456 |     67 |
+|   2 | BUNNY  | 1234567890 |     98 |
+|   3 | VINNY  | 0987564321 |     86 |
+|   4 | CHINNU | 0987586456 |     78 |
++-----+--------+------------+--------+
+4 rows in set (0.00 sec)
+
+mysql> INSERT INTO STUDENTS VALUES(5,'JENNY','1237890654',77);
+Query OK, 1 row affected (0.01 sec)
+
+mysql> SELECT*FROM STUDENTS;
++-----+--------+------------+--------+
+| SID | SNAME  | SMOBILE    | SMARKS |
++-----+--------+------------+--------+
+|   1 | SUNNY  | 8897656456 |     67 |
+|   2 | BUNNY  | 1234567890 |     98 |
+|   3 | VINNY  | 0987564321 |     86 |
+|   4 | CHINNU | 0987586456 |     78 |
+|   5 | JENNY  | 1237890654 |     77 |
++-----+--------+------------+--------+
+5 rows in set (0.00 sec)
+
+mysql> UPDATE STUDENTS SET SMARKS=78 WHERE SID=5;
+Query OK, 1 row affected (0.01 sec)
+Rows matched: 1  Changed: 1  Warnings: 0
+
+mysql> SELECT*FROM STUDENTS;
++-----+--------+------------+--------+
+| SID | SNAME  | SMOBILE    | SMARKS |
++-----+--------+------------+--------+
+|   1 | SUNNY  | 8897656456 |     67 |
+|   2 | BUNNY  | 1234567890 |     98 |
+|   3 | VINNY  | 0987564321 |     86 |
+|   4 | CHINNU | 0987586456 |     78 |
+|   5 | JENNY  | 1237890654 |     78 |
++-----+--------+------------+--------+
+5 rows in set (0.00 sec)
+
+mysql> DELETE FROM STUDENTS WHERE SID=1;
+ERROR 1142 (42000): DELETE command denied to user 'MONICA'@'localhost' for table 'students'
+mysql>
+
+
+AFTER REVOKEING INSERT AND DELETE FROM MONICA (ONLY SELECT PRIVILEGE IS THERE)
+
+mysql> DELETE FROM STUDENTS WHERE SID=1;
+ERROR 1142 (42000): DELETE command denied to user 'MONICA'@'localhost' for table 'students'
+mysql> UPDATE STUDENTS SET SMARKS=78 WHERE SID=5;
+ERROR 1142 (42000): UPDATE command denied to user 'MONICA'@'localhost' for table 'students'
+mysql> INSERT INTO STUDENTS VALUES(5,'JENNY','1237890654',77);
+ERROR 1142 (42000): INSERT command denied to user 'MONICA'@'localhost' for table 'students'
+mysql> SELECT*FROM STUDENTS;
++-----+--------+------------+--------+
+| SID | SNAME  | SMOBILE    | SMARKS |
++-----+--------+------------+--------+
+|   1 | SUNNY  | 8897656456 |     67 |
+|   2 | BUNNY  | 1234567890 |     98 |
+|   3 | VINNY  | 0987564321 |     86 |
+|   4 | CHINNU | 0987586456 |     78 |
+|   5 | JENNY  | 1237890654 |     78 |
++-----+--------+------------+--------+
+5 rows in set (0.00 sec)
+
+mysql>
